@@ -1,12 +1,17 @@
 /* See LICENSE file for copyright and license details. */
 
+#include <X11/XF86keysym.h>
+
 /* appearance */
 static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const char *fonts[]          = { "monospace:size=10" };
-static const char dmenufont[]       = "monospace:size=10";
+static const char *fonts[]          = {
+  "Inconsolata:size=12",
+  "FontAwesome:size=12",
+};
+static const char dmenufont[]       = "Inconsolata:size=14";
 static const char col_gray1[]       = "#222222";
 static const char col_gray2[]       = "#444444";
 static const char col_gray3[]       = "#bbbbbb";
@@ -55,14 +60,25 @@ static const Layout layouts[] = {
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
 /* commands */
+
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
-static const char *termcmd[]  = { "st", NULL };
+static const char *termcmd[] = {"alacritty", NULL};
+static const char *emacs[] = {"emacs", NULL};
+static const char *sublime[] = {"subl", NULL};
+static const char *brave[] = {"brave", "--force-dark-mode", "--ignore-gpu-blacklist", "--enable-gpu-rasterization", "--enable-native-gpu-memory-buffers", "--enable-zero-copy", "--enable-accelerated-mjpeg-decode", "--enable-accelerated-video", "--password-store=gnome", NULL};
+static const char *upvol[]   = { "/usr/bin/pactl", "set-sink-volume", "0", "+5%",     NULL };
+static const char *downvol[] = { "/usr/bin/pactl", "set-sink-volume", "0", "-5%",     NULL };
+static const char *mutevol[] = { "/usr/bin/pactl", "set-sink-mute",   "0", "toggle",  NULL };
+static const char *upbright[] = { "/usr/bin/xbacklight",   "-inc",    "5", NULL };
+static const char *downbright[] = { "/usr/bin/xbacklight", "-dec",    "5", NULL };
+static const char *wally[] = { "/bin/wally", NULL };
+static const char *goland[] = { "/home/jim/.local/bin/tools/goland", NULL };
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
-	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = termcmd } },
+	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
@@ -70,7 +86,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_d,      incnmaster,     {.i = -1 } },
 	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.05} },
 	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.05} },
-	{ MODKEY,                       XK_Return, zoom,           {0} },
+	{ MODKEY|ShiftMask,             XK_Return, zoom,           {0} },
 	{ MODKEY,                       XK_Tab,    view,           {0} },
 	{ MODKEY|ShiftMask,             XK_c,      killclient,     {0} },
 	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
@@ -84,6 +100,18 @@ static Key keys[] = {
 	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
+  { ControlMask,                  XK_F10,     spawn,          {.v = goland} },
+  { ControlMask,                  XK_F9,     spawn,          {.v = brave} },
+  { ControlMask,                  XK_F11,    spawn,          {.v = sublime} },
+  { ControlMask,                  XK_F12,    spawn,          {.v = emacs} },
+  /* { MODKEY,                       XK_i,      shiftview,      { .i = +1 } }, */
+	/* { MODKEY,                       XK_u,      shiftview,      { .i = -1 } }, */
+  { 0,                            XF86XK_AudioLowerVolume, spawn,    {.v = downvol } },
+	{ 0,                            XF86XK_AudioMute,        spawn,    {.v = mutevol } },
+	{ 0,                            XF86XK_AudioRaiseVolume, spawn,    {.v = upvol   } },
+  { 0,                            XF86XK_MonBrightnessUp,    spawn,  {.v = upbright } },
+  { 0,                            XF86XK_MonBrightnessDown,  spawn,  {.v = downbright } },
+  { MODKEY,                       XK_F8,     spawn,          {.v = wally} },
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)
