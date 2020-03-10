@@ -68,8 +68,8 @@ static const char *termcmd[] = {"alacritty", NULL};
 static const char *emacs[] = {"emacs", NULL};
 /* static const char *sublime[] = {"subl", NULL}; */
 static const char *code[] = {"code", NULL};
-/* static const char *brave[] = {"brave", "--force-dark-mode", "--ignore-gpu-blacklist", "--enable-gpu-rasterization", "--enable-native-gpu-memory-buffers", "--enable-zero-copy", "--enable-accelerated-mjpeg-decode", "--enable-accelerated-video", "--password-store=gnome", NULL}; */
-static const char *firefox[] = {"firefox", NULL };
+static const char *brave[] = {"brave", "--force-dark-mode", "--ignore-gpu-blacklist", "--enable-gpu-rasterization", "--enable-native-gpu-memory-buffers", "--enable-zero-copy", "--enable-accelerated-mjpeg-decode", "--enable-accelerated-video", "--password-store=gnome", NULL};
+/* static const char *firefox[] = {"firefox", NULL }; */
 static const char *upvol[]   = { "/usr/bin/pactl", "set-sink-volume", "0", "+5%",     NULL };
 static const char *downvol[] = { "/usr/bin/pactl", "set-sink-volume", "0", "-5%",     NULL };
 static const char *mutevol[] = { "/usr/bin/pactl", "set-sink-mute",   "0", "toggle",  NULL };
@@ -105,7 +105,7 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_Page_Up,   tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_Page_Down, tagmon,         {.i = +1 } },
   { ControlMask,                  XK_F10,    spawn,          {.v = goland} },
-  { ControlMask,                  XK_F9,     spawn,          {.v = firefox} },
+  { ControlMask,                  XK_F9,     spawn,          {.v = brave} },
   { ControlMask,                  XK_F11,    spawn,          {.v = code} },
   { ControlMask,                  XK_F12,    spawn,          {.v = emacs} },
   { MODKEY,                       XK_Right,  shiftview,      { .i = +1 } },
