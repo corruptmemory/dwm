@@ -69,6 +69,7 @@ static const char *emacs[] = {"emacs", NULL};
 /* static const char *sublime[] = {"subl", NULL}; */
 static const char *code[] = {"code", NULL};
 /* static const char *brave[] = {"brave", "--force-dark-mode", "--ignore-gpu-blacklist", "--enable-gpu-rasterization", "--enable-native-gpu-memory-buffers", "--enable-zero-copy", "--enable-accelerated-mjpeg-decode", "--enable-accelerated-video", "--password-store=gnome", NULL}; */
+/* static const char *chrome[] = {"google-chrome-stable", NULL }; */
 static const char *firefox[] = {"firefox", NULL };
 static const char *upvol[]   = { "/usr/bin/pactl", "set-sink-volume", "0", "+5%",     NULL };
 static const char *downvol[] = { "/usr/bin/pactl", "set-sink-volume", "0", "-5%",     NULL };
@@ -98,6 +99,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_space,  setlayout,      {0} },
 	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
 	{ MODKEY|ShiftMask,             XK_f,      togglefullscr,  {0} },
+	{ MODKEY,                       XK_s,      togglesticky,   {0} },
 	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
 	{ MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
 	{ MODKEY,                       XK_Page_Up,   focusmon,       {.i = -1 } },
