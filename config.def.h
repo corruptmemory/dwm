@@ -107,6 +107,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_Page_Down, focusmon,       {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_Page_Up,   tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_Page_Down, tagmon,         {.i = +1 } },
+	{ MODKEY,                       XK_F5,     xrdb,           {.v = NULL } },
   { ControlMask,                  XK_F10,    spawn,          {.v = goland} },
   { ControlMask,                  XK_F9,     spawn,          {.v = firefox} },
   { ControlMask,                  XK_F11,    spawn,          {.v = code} },
