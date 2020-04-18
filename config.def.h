@@ -8,8 +8,10 @@ static const unsigned int snap      = 32;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const char *fonts[]          = {
+  /* "Mononoki Nerd Font:size=9:antialias=true:autohint=true", */
   "FiraCode Nerd Font Mono:size=12",
-  "FontAwesome:size=12",
+  "Hack:size=8:antialias=true:autohint=true",
+  "JoyPixels:size=10:antialias=true:autohint=true",
 };
 static const char dmenufont[]       = "FiraCode Nerd Font Mono:size=14";
 static char normbgcolor[]           = "#222222";
@@ -33,8 +35,9 @@ static const Rule rules[] = {
 	 *	WM_NAME(STRING) = title
 	 */
 	/* class      instance    title       tags mask     isfloating   monitor */
-	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
-	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
+	{ "Gimp",              NULL,       NULL,       0,            1,           -1 },
+	{ "Firefox",           NULL,       NULL,       1 << 8,       0,           -1 },
+	{ "jetbrains-goland",  NULL,       "win0",       0,       1,           -1 },
 };
 
 /* layout(s) */
@@ -42,11 +45,14 @@ static const float mfact     = 0.55; /* factor of master area size [0.05..0.95] 
 static const int nmaster     = 1;    /* number of clients in master area */
 static const int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
 
+#include "layouts.c"
 static const Layout layouts[] = {
 	/* symbol     arrange function */
 	{ "[]=",      tile },    /* first entry is default */
 	{ "><>",      NULL },    /* no layout function means floating behavior */
 	{ "[M]",      monocle },
+	{ "HHH",      grid },
+  { NULL,       NULL },
 };
 
 /* key definitions */
@@ -73,7 +79,11 @@ static const Layout layouts[] = {
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", normbgcolor, "-nf", normfgcolor, "-sb", selbordercolor, "-sf", selfgcolor, NULL };
 /* static const char *termcmd[] = {"st", NULL}; */
-static const char *termcmd[] = {"alacritty", NULL};
+/* static const char *termcmd[] = {"alacritty", NULL}; */
+static const char *termcmd[] = {"termite", NULL};
+static const char scratchpadname[] = "scratchpad";
+static const char *scratchpadcmd[] = { "termite", "-t", scratchpadname, "-g", "120x34", NULL };
+static const char *toggleExternalMonitor[] = {"toggle-external-monitor-dwm", NULL};
 static const char *emacs[] = {"emacs", NULL};
 /* static const char *sublime[] = {"subl", NULL}; */
 static const char *code[] = {"code", NULL};
@@ -86,13 +96,19 @@ static const char *mutevol[] = { "/usr/bin/pactl", "set-sink-mute",   "0", "togg
 static const char *upbright[] = { "/usr/bin/xbacklight",   "-inc",    "5", NULL };
 static const char *downbright[] = { "/usr/bin/xbacklight", "-dec",    "5", NULL };
 static const char *wally[] = { "/bin/wally", NULL };
+static const char *maimsel[] = { "maimsel", NULL };
 static const char *goland[] = { "/home/jim/.local/bin/tools/goland", NULL };
+
+#include "shiftview.c"
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
+	{ MODKEY|ShiftMask,             XK_Return, togglescratch,  {.v = scratchpadcmd } },
 	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
+  { MODKEY|ShiftMask,             XK_Up,     rotatestack,    {.i = +1 } },
+  { MODKEY|ShiftMask,             XK_Down,   rotatestack,    {.i = -1 } },
   STACKKEYS(MODKEY,                          focus)
   STACKKEYS(MODKEY|ShiftMask,                push)
 	{ MODKEY,                       XK_i,      incnmaster,     {.i = +1 } },
@@ -105,17 +121,21 @@ static Key keys[] = {
 	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
 	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[1]} },
 	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
+	{ MODKEY,                       XK_g,      setlayout,      {.v = &layouts[3]} },
 	{ MODKEY,                       XK_space,  setlayout,      {0} },
 	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
 	{ MODKEY|ShiftMask,             XK_f,      togglefullscr,  {0} },
 	{ MODKEY,                       XK_s,      togglesticky,   {0} },
+	{ MODKEY|ControlMask,           XK_Up,  cyclelayout,       {.i = -1 } },
+	{ MODKEY|ControlMask,           XK_Down, cyclelayout,      {.i = +1 } },
 	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
 	{ MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
-	{ MODKEY,                       XK_Page_Up,   focusmon,       {.i = -1 } },
-	{ MODKEY,                       XK_Page_Down, focusmon,       {.i = +1 } },
-	{ MODKEY|ShiftMask,             XK_Page_Up,   tagmon,         {.i = -1 } },
-	{ MODKEY|ShiftMask,             XK_Page_Down, tagmon,         {.i = +1 } },
+	{ MODKEY,                       XK_Page_Up,   focusmon,    {.i = -1 } },
+	{ MODKEY,                       XK_Page_Down, focusmon,    {.i = +1 } },
+	{ MODKEY|ShiftMask,             XK_Page_Up,   tagmon,      {.i = -1 } },
+	{ MODKEY|ShiftMask,             XK_Page_Down, tagmon,      {.i = +1 } },
 	{ MODKEY,                       XK_F5,     xrdb,           {.v = NULL } },
+  { 0,                            XK_Print,    spawn,          {.v = maimsel} },
   { ControlMask,                  XK_F10,    spawn,          {.v = goland} },
   { ControlMask,                  XK_F9,     spawn,          {.v = firefox} },
   { ControlMask,                  XK_F11,    spawn,          {.v = code} },
@@ -128,6 +148,7 @@ static Key keys[] = {
   { 0,                            XF86XK_MonBrightnessUp,    spawn,  {.v = upbright } },
   { 0,                            XF86XK_MonBrightnessDown,  spawn,  {.v = downbright } },
   { MODKEY,                       XK_F8,     spawn,          {.v = wally} },
+  { MODKEY,                       XK_F7,     spawn,          {.v = toggleExternalMonitor} },
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)
