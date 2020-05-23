@@ -7,11 +7,15 @@ static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
+/* static const char *fonts[]          = { */
+/*   "Mononoki Nerd Font:size=12:antialias=true:autohint=true", */
+/*   /\* "FiraCode Nerd Font Mono:size=12", *\/ */
+/*   "JoyPixels:size=12:antialias=true:autohint=true", */
+/*   "Hack:size=12:antialias=true:autohint=true", */
+/* }; */
 static const char *fonts[]          = {
-  /* "Mononoki Nerd Font:size=9:antialias=true:autohint=true", */
-  "FiraCode Nerd Font Mono:size=12",
-  "Hack:size=8:antialias=true:autohint=true",
-  "JoyPixels:size=10:antialias=true:autohint=true",
+  "FiraCode Nerd Font Mono:size=12", //"monospace:size=10",
+  "JoyPixels:pixelsize=10:antialias=true:autohint=true",
 };
 static const char dmenufont[]       = "FiraCode Nerd Font Mono:size=14";
 static char normbgcolor[]           = "#222222";
@@ -88,8 +92,8 @@ static const char *emacs[] = {"emacs", NULL};
 /* static const char *sublime[] = {"subl", NULL}; */
 static const char *code[] = {"code", NULL};
 /* static const char *brave[] = {"brave", "--force-dark-mode", "--ignore-gpu-blacklist", "--enable-gpu-rasterization", "--enable-native-gpu-memory-buffers", "--enable-zero-copy", "--enable-accelerated-mjpeg-decode", "--enable-accelerated-video", "--password-store=gnome", NULL}; */
-/* static const char *chrome[] = {"google-chrome-stable", NULL }; */
-static const char *firefox[] = {"firefox", NULL };
+static const char *chrome[] = {"google-chrome-stable", NULL };
+/* static const char *firefox[] = {"firefox", NULL }; */
 static const char *upvol[]   = { "/usr/bin/pactl", "set-sink-volume", "0", "+5%",     NULL };
 static const char *downvol[] = { "/usr/bin/pactl", "set-sink-volume", "0", "-5%",     NULL };
 static const char *mutevol[] = { "/usr/bin/pactl", "set-sink-mute",   "0", "toggle",  NULL };
@@ -99,7 +103,7 @@ static const char *wally[] = { "/bin/wally", NULL };
 static const char *maimsel[] = { "maimsel", NULL };
 static const char *goland[] = { "/home/jim/.local/bin/tools/goland", NULL };
 
-#include "shiftview.c"
+/* #include "shiftview.c" */
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -137,7 +141,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_F5,     xrdb,           {.v = NULL } },
   { 0,                            XK_Print,    spawn,          {.v = maimsel} },
   { ControlMask,                  XK_F10,    spawn,          {.v = goland} },
-  { ControlMask,                  XK_F9,     spawn,          {.v = firefox} },
+  { ControlMask,                  XK_F9,     spawn,          {.v = chrome} },
   { ControlMask,                  XK_F11,    spawn,          {.v = code} },
   { ControlMask,                  XK_F12,    spawn,          {.v = emacs} },
   { MODKEY,                       XK_Right,  shiftview,      { .i = +1 } },
