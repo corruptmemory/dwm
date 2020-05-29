@@ -1,5 +1,6 @@
 /* See LICENSE file for copyright and license details. */
 
+#include <X11/X.h>
 #include <X11/XF86keysym.h>
 
 /* appearance */
@@ -85,18 +86,16 @@ static const Layout layouts[] = {
 
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", normbgcolor, "-nf", normfgcolor, "-sb", selbordercolor, "-sf", selfgcolor, NULL };
-/* static const char *termcmd[] = {"st", NULL}; */
-/* static const char *termcmd[] = {"alacritty", NULL}; */
+static const char *termcmdst[] = {"st", NULL};
 static const char *termcmd[] = {"termite", NULL};
 static const char scratchpadname[] = "scratchpad";
 static const char *scratchpadcmd[] = { "termite", "-t", scratchpadname, "-g", "120x34", NULL };
 static const char *toggleExternalMonitor[] = {"toggle-external-monitor-dwm", NULL};
 static const char *emacs[] = {"emacs", NULL};
-/* static const char *sublime[] = {"subl", NULL}; */
+static const char *sublime[] = {"subl", NULL};
 static const char *code[] = {"code", NULL};
-/* static const char *brave[] = {"brave", "--force-dark-mode", "--ignore-gpu-blacklist", "--enable-gpu-rasterization", "--enable-native-gpu-memory-buffers", "--enable-zero-copy", "--enable-accelerated-mjpeg-decode", "--enable-accelerated-video", "--password-store=gnome", NULL}; */
 static const char *chrome[] = {"google-chrome-stable", NULL };
-/* static const char *firefox[] = {"firefox", NULL }; */
+static const char *firefox[] = {"firefox", NULL };
 static const char *upvol[]   = { "/usr/bin/pactl", "set-sink-volume", "0", "+5%",     NULL };
 static const char *downvol[] = { "/usr/bin/pactl", "set-sink-volume", "0", "-5%",     NULL };
 static const char *mutevol[] = { "/usr/bin/pactl", "set-sink-mute",   "0", "toggle",  NULL };
@@ -111,8 +110,9 @@ static const char *goland[] = { "/home/jim/.local/bin/tools/goland", NULL };
 static Key keys[] = {
   /* modifier                     key           function        argument */
   { MODKEY,                       XK_p,         spawn,          {.v  = dmenucmd } },
-  { MODKEY|ShiftMask,             XK_Return,    togglescratch,  {.v  = scratchpadcmd } },
+  { MODKEY|ShiftMask,             XK_s,         togglescratch,  {.v  = scratchpadcmd } },
   { MODKEY,                       XK_Return,    spawn,          {.v  = termcmd } },
+  { MODKEY|ControlMask,           XK_Return,    spawn,          {.v  = termcmdst } },
   { MODKEY,                       XK_b,         togglebar,      {0} },
   { MODKEY|ShiftMask,             XK_Up,        rotatestack,    {.i  = +1 } },
   { MODKEY|ShiftMask,             XK_Down,      rotatestack,    {.i  = -1 } },
@@ -162,20 +162,22 @@ static Key keys[] = {
   /* { MODKEY|ShiftMask,             XK_o,      incrovgaps,     {.i = -1 } }, */
 
 
-  { 0,                            XK_Print,    spawn,          {.v = maimsel} },
-  { ControlMask,                  XK_F10,    spawn,          {.v = goland} },
-  { ControlMask,                  XK_F9,     spawn,          {.v = chrome} },
-  { ControlMask,                  XK_F11,    spawn,          {.v = code} },
-  { ControlMask,                  XK_F12,    spawn,          {.v = emacs} },
-  { MODKEY,                       XK_Right,  shiftview,      { .i = +1 } },
-  { MODKEY,                       XK_Left,   shiftview,      { .i = -1 } },
-  { 0,                            XF86XK_AudioLowerVolume,   spawn,    {.v = downvol } },
-  { 0,                            XF86XK_AudioMute,          spawn,    {.v = mutevol } },
-  { 0,                            XF86XK_AudioRaiseVolume,   spawn,    {.v = upvol   } },
-  { 0,                            XF86XK_MonBrightnessUp,    spawn,  {.v = upbright } },
-  { 0,                            XF86XK_MonBrightnessDown,  spawn,  {.v = downbright } },
-  { MODKEY,                       XK_F8,     spawn,          {.v = wally} },
-  { MODKEY,                       XK_F7,     spawn,          {.v = toggleExternalMonitor} },
+  { 0,                            XK_Print,                  spawn,             {.v = maimsel} },
+  { ControlMask,                  XK_F10,                    spawn,             {.v = goland} },
+  { ControlMask,                  XK_F9,                     spawn,             {.v = chrome} },
+  { MODKEY|ControlMask,           XK_F9,                     spawn,             {.v = firefox} },
+  { ControlMask,                  XK_F11,                    spawn,             {.v = sublime} },
+  { MODKEY|ControlMask,           XK_F11,                    spawn,             {.v = code} },
+  { ControlMask,                  XK_F12,                    spawn,             {.v = emacs} },
+  { MODKEY,                       XK_Right,                  shiftview,         { .i = +1 } },
+  { MODKEY,                       XK_Left,                   shiftview,         { .i = -1 } },
+  { 0,                            XF86XK_AudioLowerVolume,   spawn,             {.v = downvol } },
+  { 0,                            XF86XK_AudioMute,          spawn,             {.v = mutevol } },
+  { 0,                            XF86XK_AudioRaiseVolume,   spawn,             {.v = upvol   } },
+  { 0,                            XF86XK_MonBrightnessUp,    spawn,             {.v = upbright } },
+  { 0,                            XF86XK_MonBrightnessDown,  spawn,             {.v = downbright } },
+  { MODKEY,                       XK_F8,                     spawn,             {.v = wally} },
+  { MODKEY,                       XK_F7,                     spawn,             {.v = toggleExternalMonitor} },
   TAGKEYS(                        XK_1,                      0)
   TAGKEYS(                        XK_2,                      1)
   TAGKEYS(                        XK_3,                      2)
