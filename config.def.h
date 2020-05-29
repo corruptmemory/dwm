@@ -52,6 +52,8 @@ static const int nmaster     = 1;    /* number of clients in master area */
 static const int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
 
 #include "layouts.c"
+#include "fibonacci.c"
+
 static const Layout layouts[] = {
   /* symbol     arrange function */
   { "[]=",      tile },    /* first entry is default */
@@ -63,6 +65,8 @@ static const Layout layouts[] = {
   { "[D]",      deck },
   { "TTT",      bstack },
   { "===",      bstackhoriz },
+  { "[@]",      spiral },
+  { "[\\]",     dwindle },
   { NULL,       NULL },
 };
 
@@ -108,8 +112,6 @@ static const char *wally[] = { "/bin/wally", NULL };
 static const char *maimsel[] = { "maimsel", NULL };
 static const char *goland[] = { "/home/jim/.local/bin/tools/goland", NULL };
 
-/* #include "shiftview.c" */
-
 static Key keys[] = {
   /* modifier                     key           function        argument */
   { MODKEY,                       XK_p,         spawn,          {.v  = dmenucmd } },
@@ -137,6 +139,8 @@ static Key keys[] = {
   { MODKEY,                       XK_d,         setlayout,      {.v = &layouts[6]} },
   { MODKEY|ShiftMask,             XK_b,         setlayout,      {.v = &layouts[7]} },
   { MODKEY|ControlMask,           XK_b,         setlayout,      {.v = &layouts[8]} },
+  { MODKEY,                       XK_r,         setlayout,      {.v = &layouts[9]} },
+  { MODKEY|ShiftMask,             XK_r,         setlayout,      {.v = &layouts[10]} },
   { MODKEY,                       XK_space,     setlayout,      {0} },
   { MODKEY|ShiftMask,             XK_space,     togglefloating, {0} },
   { MODKEY|ShiftMask,             XK_f,         togglefullscr,  {0} },
