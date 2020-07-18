@@ -24,7 +24,7 @@ static char normbgcolor[]           = "#222222";
 static char normbordercolor[]       = "#444444";
 static char normfgcolor[]           = "#bbbbbb";
 static char selfgcolor[]            = "#eeeeee";
-static char selbordercolor[]        = "#005577";
+static char selbordercolor[]        = "#8f2424";
 static char selbgcolor[]            = "#005577";
 static char *colors[][3] = {
        /*               fg           bg           border   */
@@ -93,10 +93,12 @@ static const Layout layouts[] = {
 
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", normbgcolor, "-nf", normfgcolor, "-sb", selbordercolor, "-sf", selfgcolor, NULL };
-static const char *termcmdst[] = {"st", NULL};
-static const char *termcmd[] = {"termite", NULL};
+// static const char *termcmdst[] = {"st", NULL};
+static const char *termcmdtermite[] = {"termite", NULL};
+// static const char *termcmd[] = {"termite", NULL};
+static const char *termcmd[] = {"alacritty", NULL};
 static const char scratchpadname[] = "scratchpad";
-static const char *scratchpadcmd[] = { "termite", "-t", scratchpadname, "-g", "120x34", NULL };
+static const char *scratchpadcmd[] = { "alacritty", "-t", scratchpadname, "-d", "120", "34", NULL };
 static const char *toggleExternalMonitor[] = {"toggle-external-monitor-dwm", NULL};
 static const char *emacs[] = {"emacs", NULL};
 static const char *sublime[] = {"subl", NULL};
@@ -106,18 +108,22 @@ static const char *firefox[] = {"firefox", NULL };
 static const char *upvol[]   = { "/usr/bin/pactl", "set-sink-volume", "0", "+5%",     NULL };
 static const char *downvol[] = { "/usr/bin/pactl", "set-sink-volume", "0", "-5%",     NULL };
 static const char *mutevol[] = { "/usr/bin/pactl", "set-sink-mute",   "0", "toggle",  NULL };
-static const char *upbright[] = { "/usr/bin/xbacklight",   "-inc",    "5", NULL };
-static const char *downbright[] = { "/usr/bin/xbacklight", "-dec",    "5", NULL };
+
+static const char *upbright[] = { "backlight",   "-r",    "0.05", NULL };
+static const char *downbright[] = { "backlight", "-l",    "0.05", NULL };
 static const char *wally[] = { "/bin/wally", NULL };
 static const char *maimsel[] = { "maimsel", NULL };
 static const char *goland[] = { "/home/jim/.local/bin/tools/goland", NULL };
+static const char *idea[] = { "/home/jim/.local/bin/idea", NULL };
+
+static const char *logout[] = {"sudo", "systemctl", "restart", "xdm.service", NULL };
 
 static Key keys[] = {
   /* modifier                     key           function        argument */
   { MODKEY,                       XK_p,         spawn,          {.v  = dmenucmd } },
   { MODKEY|ShiftMask,             XK_s,         togglescratch,  {.v  = scratchpadcmd } },
   { MODKEY,                       XK_Return,    spawn,          {.v  = termcmd } },
-  { MODKEY|ControlMask,           XK_Return,    spawn,          {.v  = termcmdst } },
+  { MODKEY|ControlMask,           XK_Return,    spawn,          {.v  = termcmdtermite } },
   { MODKEY,                       XK_b,         togglebar,      {0} },
   { MODKEY|ShiftMask,             XK_Up,        rotatestack,    {.i  = +1 } },
   { MODKEY|ShiftMask,             XK_Down,      rotatestack,    {.i  = -1 } },
@@ -136,7 +142,7 @@ static Key keys[] = {
   { MODKEY,                       XK_g,         setlayout,      {.v = &layouts[3]} },
   { MODKEY,                       XK_u,         setlayout,      {.v = &layouts[4]} },
   { MODKEY,                       XK_o,         setlayout,      {.v = &layouts[5]} },
-  { MODKEY,                       XK_d,         setlayout,      {.v = &layouts[6]} },
+  { MODKEY|ShiftMask,             XK_d,         setlayout,      {.v = &layouts[6]} },
   { MODKEY|ShiftMask,             XK_b,         setlayout,      {.v = &layouts[7]} },
   { MODKEY|ControlMask,           XK_b,         setlayout,      {.v = &layouts[8]} },
   { MODKEY,                       XK_r,         setlayout,      {.v = &layouts[9]} },
@@ -173,9 +179,9 @@ static Key keys[] = {
 
 
   { 0,                            XK_Print,                  spawn,             {.v = maimsel} },
-  { ControlMask,                  XK_F10,                    spawn,             {.v = goland} },
-  { ControlMask,                  XK_F9,                     spawn,             {.v = chrome} },
-  { MODKEY|ControlMask,           XK_F9,                     spawn,             {.v = firefox} },
+  { ControlMask,                  XK_F10,                    spawn,             {.v = idea} },
+  { MODKEY|ControlMask,           XK_F9,                     spawn,             {.v = chrome} },
+  { ControlMask,                  XK_F9,                     spawn,             {.v = firefox} },
   { ControlMask,                  XK_F11,                    spawn,             {.v = sublime} },
   { MODKEY|ControlMask,           XK_F11,                    spawn,             {.v = code} },
   { ControlMask,                  XK_F12,                    spawn,             {.v = emacs} },
@@ -197,7 +203,8 @@ static Key keys[] = {
   TAGKEYS(                        XK_7,                      6)
   TAGKEYS(                        XK_8,                      7)
   TAGKEYS(                        XK_9,                      8)
-  { MODKEY|ShiftMask,             XK_BackSpace, quit,        {0} },
+  { MODKEY|ShiftMask,             XK_BackSpace,              quit,              {0} },
+  { MODKEY|ControlMask,           XK_BackSpace,              spawn,             {.v = logout} },
 };
 
 /* button definitions */
